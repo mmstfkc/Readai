@@ -65,6 +65,11 @@ Readai intentionally separates raw text extraction from semantic understanding.
 At this stage, the system focuses on extracting as much information as possible
 from documents, even if the result contains noise or inconsistencies.
 
+Normalized outputs produced by LLMs are stored in the same artifact
+as the raw OCR result, keyed by model name.
+This allows multiple models to be evaluated without duplicating files
+or re-running expensive inference steps.
+
 ### Why this matters
 Real-world documents are messy:
 
