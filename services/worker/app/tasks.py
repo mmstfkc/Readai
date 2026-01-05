@@ -5,7 +5,7 @@ import json
 from .celery_app import celery_app
 
 from app.extractors.dispatcher import ExtractorDispatcher
-from app.llm.openai_llm import MockLLM
+from app.llm.local_llm import LocalLLM
 
 STORAGE_OUTPUT_DIR = os.getenv("STORAGE_OUTPUT_DIR", "/app/storage/outputs")
 
@@ -26,7 +26,7 @@ def process_job(self, job_id: str, input_path: str):
     2. LLM normalization (idempotent, per model)
     """
     dispatcher = ExtractorDispatcher()
-    llm = MockLLM()  # will be replaced with a real LLM in the future
+    llm = LocalLLM()  # will be replaced with a real LLM in the future
 
     raw_output_path = os.path.join(
         STORAGE_OUTPUT_DIR,
