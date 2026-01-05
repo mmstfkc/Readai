@@ -42,7 +42,6 @@ services:
       - ../models:/app/models
     depends_on:
       - redis
-    command: ["bash", "-lc", "python -V && echo 'Worker container ready (no celery yet)' && tail -f /dev/null"]
 
     environment:
       - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}

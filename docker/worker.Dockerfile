@@ -9,6 +9,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir --upgrade pip
+COPY services/worker/requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r /app/requirements.txt
 
-CMD ["bash", "-lc", "python -V && tail -f /dev/null"]
+COPY services/worker /app/services/worker
+
+WORKDIR /app/services/worker
+
+CMD ["celery", "-A", "app.celery_app.celery_app", "worker", "--loglevel=info"]
