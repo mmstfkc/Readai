@@ -23,8 +23,6 @@ services:
       - "8000:8000"
     depends_on:
       - redis
-    # Şimdilik FastAPI yok: container ayakta dursun
-    command: ["bash", "-lc", "python -V && echo 'API container ready (no app yet)' && tail -f /dev/null"]
 
     # GPU opsiyonel: NVIDIA Container Toolkit yüklüyse çalışır
     environment:
