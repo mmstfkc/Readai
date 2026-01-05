@@ -1,6 +1,12 @@
-from .celery_app import celery_app
-import time
 import os
+import time
+import json
+
+from .celery_app import celery_app
+
+from app.extractors.dispatcher import ExtractorDispatcher
+
+STORAGE_OUTPUT_DIR = os.getenv("STORAGE_OUTPUT_DIR", "/app/storage/outputs")
 
 @celery_app.task(bind=True)
 def ping(self):
@@ -13,15 +19,27 @@ def ping(self):
 
 @celery_app.task(bind=True)
 def process_job(self, job_id: str, input_path: str):
-    """
-    Dummy job processor.
-    Later: OCR + LLM pipeline will be here.
-    """
-    time.sleep(2)
+    dispatcher = ExtractorDispatcher()
+
+    extracted_text = dispatcher.extract(input_path)
+
+    os.makedirs(STORAGE_OUTPUT_DIR, exist_ok=True)
+    output_path = os.path.join(STORAGE_OUTPUT_DIR, f"{job_id}_raw.json")
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "job_id": job_id,
+                "stage": "raw_extraction",
+                "text": extracted_text
+            },
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
 
     return {
         "job_id": job_id,
         "status": "completed",
-        "input_path": input_path,
-        "message": "Dummy processing finished"
+        "output_path": output_path
     }
