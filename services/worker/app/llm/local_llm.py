@@ -63,6 +63,10 @@ class LocalLLM(BaseLLM):
 
         decoded = self.tokenizer.decode(out[0], skip_special_tokens=True)
 
+        print("=== RAW LLM OUTPUT ===")
+        print(decoded)
+        print("=== END RAW LLM OUTPUT ===")
+
         # only extract the CLEANED TEXT section
         if "CLEANED TEXT:" in decoded:
             return decoded.split("CLEANED TEXT:")[-1].strip()

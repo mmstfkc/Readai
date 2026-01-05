@@ -133,3 +133,9 @@ and postpones interpretation and correction to later steps.
 - Focused on text region
 - Cleaner OCR output
 - Risk of losing peripheral or contextual information
+
+
+## License
+
+This project is licensed for **non-commercial use only**.
+See the [LICENSE](LICENSE) file for details.
