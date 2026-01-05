@@ -1,0 +1,54 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: readai-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - readai_redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/api.Dockerfile
+    container_name: readai-api
+    env_file:
+      - ../.env
+    volumes:
+      - ../services/api:/app/services/api
+      - ../storage:/app/storage
+      - ../models:/app/models
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    # Şimdilik FastAPI yok: container ayakta dursun
+    command: ["bash", "-lc", "python -V && echo 'API container ready (no app yet)' && tail -f /dev/null"]
+
+    # GPU opsiyonel: NVIDIA Container Toolkit yüklüyse çalışır
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+      - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES:-compute,utility}
+
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/worker.Dockerfile
+    container_name: readai-worker
+    env_file:
+      - ../.env
+    volumes:
+      - ../services/worker:/app/services/worker
+      - ../storage:/app/storage
+      - ../models:/app/models
+    depends_on:
+      - redis
+    command: ["bash", "-lc", "python -V && echo 'Worker container ready (no celery yet)' && tail -f /dev/null"]
+
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+      - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES:-compute,utility}
+
+volumes:
+  readai_redis_data:
