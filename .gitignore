@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Runtime storage (PII olabilir, git'e girmesin)
+storage/inputs/*
+storage/outputs/*
+storage/meta/*
+
+# Local models (çok büyük, git'e girmesin)
+models/*
+!models/.keep
+
+# Logs
+*.log
