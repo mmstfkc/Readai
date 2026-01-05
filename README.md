@@ -103,30 +103,28 @@ and postpones interpretation and correction to later steps.
 
 ## Example Artifacts (Real OCR Results)
 
-<table>
-  <tr>
-    <td align="center">
-      <strong>Full Receipt (No Cropping)</strong><br/><br/>
-      <img src="static/images/image.jpg" width="280" alt="Full receipt image"/><br/><br/>
-      <a href="static/json/image_raw.json">📄 View raw OCR JSON</a>
-      <br/><br/>
-      <ul align="left">
-        <li>Contains background texture and surrounding noise</li>
-        <li>OCR output preserves more context</li>
-        <li>Higher noise level</li>
-      </ul>
-    </td>
+### Input Image — Full Receipt (No Cropping)
 
-    <td align="center">
-      <strong>Manually Cropped Receipt</strong><br/><br/>
-      <img src="static/images/cropped_image.jpg" width="280" alt="Cropped receipt image"/><br/><br/>
-      <a href="static/json/cropped_image_raw.json">📄 View raw OCR JSON</a>
-      <br/><br/>
-      <ul align="left">
-        <li>Focused on text region</li>
-        <li>Cleaner OCR output</li>
-        <li>Risk of losing peripheral or contextual information</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+<img src="static/images/image.jpg" width="320" alt="Full receipt image" />
+
+📄 **Raw OCR Output:**  
+[View raw OCR JSON](static/json/image_raw.json)
+
+**Observations:**
+- Contains background texture and surrounding noise
+- OCR output preserves more context
+- Higher noise level
+
+---
+
+### Input Image — Manually Cropped Receipt
+
+<img src="static/images/cropped_image.jpg" width="320" alt="Cropped receipt image" />
+
+📄 **Raw OCR Output:**  
+[View raw OCR JSON](static/json/cropped_image_raw.json)
+
+**Observations:**
+- Focused on text region
+- Cleaner OCR output
+- Risk of losing peripheral or contextual information
