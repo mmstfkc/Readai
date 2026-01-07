@@ -43,6 +43,14 @@ services:
     depends_on:
       - redis
 
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
     environment:
       - LOCAL_LLM_PATH=/app/models/llm/current
       - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}

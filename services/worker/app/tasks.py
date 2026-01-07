@@ -1,9 +1,8 @@
 import os
-import time
 import json
+import time
 
 from .celery_app import celery_app
-
 from app.extractors.dispatcher import ExtractorDispatcher
 from app.llm.local_llm import LocalLLM
 
@@ -21,69 +20,74 @@ def ping(self):
 @celery_app.task(bind=True)
 def process_job(self, job_id: str, input_path: str):
     """
-    Pipeline:
-    1. Raw OCR extraction (if not exists)
-    2. LLM normalization (idempotent, per model)
+    Pipeline (worker-only):
+    1. Create job JSON if not exists
+    2. Raw OCR extraction (if missing)
+    3. LLM normalization (idempotent)
     """
-    dispatcher = ExtractorDispatcher()
-    llm = LocalLLM()  # will be replaced with a real LLM in the future
-
-    raw_output_path = os.path.join(
-        STORAGE_OUTPUT_DIR,
-        f"{job_id}_raw.json"
-    )
 
     os.makedirs(STORAGE_OUTPUT_DIR, exist_ok=True)
+    output_path = os.path.join(STORAGE_OUTPUT_DIR, f"{job_id}.json")
 
     # -------------------------------------------------
-    # 1️ RAW EXTRACTION (Is there any? Check it.)
+    # 0️⃣ CREATE JOB JSON (FIRST TIME)
     # -------------------------------------------------
-    if os.path.exists(raw_output_path):
-        with open(raw_output_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    else:
-        raw_text = dispatcher.extract(input_path)
+    if not os.path.exists(output_path):
         data = {
             "job_id": job_id,
-            "stage": "raw_extraction",
-            "text": raw_text,
+            "input": {
+                "path": input_path
+            },
+            "raw_extraction": None,
             "llm": {}
         }
 
-        with open(raw_output_path, "w", encoding="utf-8") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    else:
+        with open(output_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+    dispatcher = ExtractorDispatcher()
+    llm = LocalLLM()
+    model_name = llm.model_name
+
+    # -------------------------------------------------
+    # 1️⃣ RAW OCR EXTRACTION
+    # -------------------------------------------------
+    if data.get("raw_extraction") is None:
+        raw_text = dispatcher.extract(input_path)
+
+        data["raw_extraction"] = {
+            "text": raw_text
+        }
+
+        with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
     # -------------------------------------------------
-    # 2️ LLM NORMALIZATION (idempotent)
+    # 2️⃣ LLM NORMALIZATION (IDEMPOTENT)
     # -------------------------------------------------
-    model_name = llm.model_name  # Ex: "mock-llm"
-
-    if "llm" not in data:
-        data["llm"] = {}
-
-    if model_name in data["llm"]:
-        # Previously processed with this model → No LLM call
+    if model_name in data.get("llm", {}):
         return {
             "job_id": job_id,
             "status": "skipped",
-            "reason": f"LLM output already exists for model '{model_name}'",
-            "output_path": raw_output_path
+            "reason": f"LLM output already exists for model '{model_name}'"
         }
 
-    # LLM call
-    normalized_text = llm.normalize_text(data["text"])
+    normalized_text = llm.normalize_text(
+        data["raw_extraction"]["text"]
+    )
 
     data["llm"][model_name] = {
         "normalized_text": normalized_text
     }
 
-    # Update the JSON (same file!)
-    with open(raw_output_path, "w", encoding="utf-8") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
     return {
         "job_id": job_id,
         "status": "completed",
-        "llm_model": model_name,
-        "output_path": raw_output_path
+        "llm_model": model_name
     }

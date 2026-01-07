@@ -32,7 +32,7 @@ class LocalLLM(BaseLLM):
         # Model
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
-            device_map="auto",  # Automatic mapping if GPU is available
+            device_map=None,
             torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
             trust_remote_code=True,
             local_files_only=True
@@ -59,13 +59,11 @@ class LocalLLM(BaseLLM):
                 max_new_tokens=int(os.getenv("LLM_MAX_NEW_TOKENS", "800")),
                 temperature=0.0,
                 do_sample=False,
+                repetition_penalty=1.15,
+                eos_token_id=self.tokenizer.eos_token_id,
             )
 
         decoded = self.tokenizer.decode(out[0], skip_special_tokens=True)
-
-        print("=== RAW LLM OUTPUT ===")
-        print(decoded)
-        print("=== END RAW LLM OUTPUT ===")
 
         # only extract the CLEANED TEXT section
         if "CLEANED TEXT:" in decoded:
