@@ -1,16 +1,28 @@
 import os
+import json
+import re
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from .base import BaseLLM
 from .prompts import NORMALIZE_OCR_TEXT_PROMPT
+from .postfix import apply_postfix
+
+
+def extract_first_json(text: str) -> dict:
+    """
+    Extract the first valid JSON object from LLM output.
+    """
+    matches = re.finditer(r"\{[\s\S]*?\}", text)
+    for match in matches:
+        try:
+            return json.loads(match.group())
+        except json.JSONDecodeError:
+            continue
+    raise ValueError("No valid JSON found")
 
 
 class LocalLLM(BaseLLM):
-    """
-    Loads a local model from disk (no hub download at runtime).
-    Model identity is intentionally not exposed.
-    """
 
     model_name = os.getenv("LLM_PUBLIC_NAME", "local-llm")
 
@@ -19,53 +31,54 @@ class LocalLLM(BaseLLM):
         if not os.path.isdir(self.model_path):
             raise RuntimeError(f"Local LLM path not found: {self.model_path}")
 
-        # If there is a GPU, use it
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        # Tokenizer
         self.tokenizer = AutoTokenizer.from_pretrained(
             self.model_path,
             trust_remote_code=True,
             local_files_only=True
         )
 
-        # Model
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
-            device_map=None,
             torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
             trust_remote_code=True,
             local_files_only=True
-        )
+        ).to(self.device)
+
         self.model.eval()
 
     def normalize_text(self, text: str) -> str:
-        # Prompt: “editor” behavior
-        prompt = (
-            f"{NORMALIZE_OCR_TEXT_PROMPT}\n\n"
-            f"OCR TEXT:\n{text}\n\n"
-            f"CLEANED TEXT:\n"
-        )
+        prompt = f"{NORMALIZE_OCR_TEXT_PROMPT}\n{text}"
 
         inputs = self.tokenizer(
             prompt,
-            return_tensors="pt",
-            truncation=True
-        ).to(self.model.device)
+            return_tensors="pt"
+        ).to(self.device)
+
+        max_new_tokens=len(inputs["input_ids"][0]) + 300
 
         with torch.no_grad():
-            out = self.model.generate(
+            output = self.model.generate(
                 **inputs,
-                max_new_tokens=int(os.getenv("LLM_MAX_NEW_TOKENS", "800")),
+                max_new_tokens=max_new_tokens,
                 temperature=0.0,
                 do_sample=False,
-                repetition_penalty=1.15,
-                eos_token_id=self.tokenizer.eos_token_id,
+                repetition_penalty=1.05,
+                eos_token_id=self.tokenizer.eos_token_id
             )
 
-        decoded = self.tokenizer.decode(out[0], skip_special_tokens=True)
+        decoded = self.tokenizer.decode(
+            output[0],
+            skip_special_tokens=True
+        )
 
-        # only extract the CLEANED TEXT section
-        if "CLEANED TEXT:" in decoded:
-            return decoded.split("CLEANED TEXT:")[-1].strip()
-        return decoded.strip()
+        try:
+            data = extract_first_json(decoded)
+            cleaned_text = data.get("cleaned_text", "").strip()
+            if cleaned_text:
+                return apply_postfix(cleaned_text)
+        except Exception:
+            pass
+
+        return apply_postfix(text)

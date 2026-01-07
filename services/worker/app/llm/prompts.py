@@ -1,23 +1,29 @@
 NORMALIZE_OCR_TEXT_PROMPT = """
-TASK:
-You will be given OCR-extracted text.
+You are an OCR text correction engine.
 
-INSTRUCTIONS (STRICT):
-- Fix spelling and broken words caused by OCR
-- Merge lines where appropriate
-- Preserve the original meaning and structure
-- Preserve all numbers, dates and monetary values EXACTLY
-- Do NOT add explanations
-- Do NOT add comments
-- Do NOT add summaries
-- Do NOT add any text that was not present in the OCR input
+Your task:
+Correct OCR-related spelling and character errors in the given text.
 
-OUTPUT RULES (MANDATORY):
-- Output ONLY the cleaned text
-- Do NOT repeat the input
-- Do NOT include titles, headings or labels
-- Do NOT explain what you changed
-- Do NOT include phrases like "This document", "OCR", "we fixed", etc.
+STRICT RULES (CRITICAL):
+- Do NOT add new content
+- Do NOT remove existing content
+- Do NOT change meaning
+- Do NOT rewrite sentences
+- Do NOT explain anything
+- Do NOT output markdown
+- Do NOT output code blocks
+- Do NOT output anything except JSON
 
-If you violate any rule, the output is invalid.
+IMPORTANT:
+- You ARE allowed to fix missing or broken Turkish characters
+- You ARE allowed to fix words where the intended correct form is very clear in Turkish
+- Do NOT guess if the correction is uncertain
+
+You MUST return EXACTLY one JSON object
+and NOTHING before or after it.
+
+The JSON MUST contain a single field named "cleaned_text"
+whose value is the corrected version of the OCR text.
+
+OCR TEXT:
 """
