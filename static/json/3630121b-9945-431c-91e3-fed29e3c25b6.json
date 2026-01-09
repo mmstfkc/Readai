@@ -1,0 +1,14 @@
+{
+  "job_id": "3630121b-9945-431c-91e3-fed29e3c25b6",
+  "input": {
+    "path": "/app/storage/inputs/3630121b-9945-431c-91e3-fed29e3c25b6_fatura_crop.jpg"
+  },
+  "raw_extraction": {
+    "text": "YÜSKİYE TARIPA KAERİ\n\nKcSSPERATIF\n\nTK TARIM KREDİ PAZ. VE MARKETÇİLİK A.Ş\nYAYLACIK MAHALLESİ BAŞARI CD.\nNO:24/A BUCA/İZMİR\nAnkara Kurumlar V.D./8450627145\n\n         \n\n \n\nWU 2\nTarih : 11.01.2023 MağazaNo : 5757\nSaat 1.13 1g Kasa No iz\nBelge No : 49 Z No : 205\n\nRefNo : T172023000801615\nETTİN : 51467467-9991-ed11-a3ce-08e04cb30e6b\n\n8690639001312 x 1 AD *34,90-B\nLİPTON EARL GREY DEM %e1 *34,90\n8682615191925 x 1 AD *19,25-B\nIK DEMLİK POŞET ÇAY %@1 *19,25\n8682615191925 x 1 AD *19,25-B\nIK DEMLİK POŞET ÇAY %@1 *19,25\n8682615101925 x 1 AD *19,25-B\nTK DEMLİK POŞET ÇAY %@1 *19,25\n8680643020461 x 1 AD *@,25-B\nTKK MARKET POŞETİ %18 *@,25\nToplam KDV : *0,96\nToplam : *92,98\n\nYALNIZDoksantkiTLDoksankr\n\nBANKA KREDİ KARTI *92,90\n\nj Bu e-Arsiv Faturanizi,\ne@arsiv.kooperatifmarket.com.tr\nresinden Referans No girisi yaparak\n- görüntüleyebilirsiniz.\nFirma VKN : 845 @62 7145\nFatura No +: T17202300909001615\ni Ödenen Tutar 92,90\n\n121 LLI\n\n“ İn Nahas Tüketici\n\nİrsaliye Yerine Geçer\n\nMerkez : SARAY MAlI, GIDACILAR CD.\nNO:11 KAHRAMANKAZAN/ ANKARA\nWeb : uww,kooperalifmarkeL.com.tr\nSARAY MAH, GIDACILAR CD.NO:11\nİADE İŞLEMLERİNDE SATIŞ FİŞİNİN VE\nKREDİ KARTININ İBRAZI GEREKLİDİR.\nMersis No : 0845 0627 1450 00001\n\nYALAMANI KANI ALNAN ULU NALIN NU ULU\n\n \n\f"
+  },
+  "llm": {
+    "local-llm": {
+      "normalized_text": "YÜSKİYE TARIPA KAERİ\n\nKcSSPERATIF\n\nTK TARIM KREDİ PAZ. VE MARKETÇİLİK A.Ş\nYAYLACIK MAHALLESİ BAŞARI CD.\nNO:24/A BUCA/İZMİR\nAnkara Kurumlar V.D./8450627145\n\n         \n\n \n\nWU 2\nTarih : 11.01.2023 MağazaNo : 5757\nSaat 1.13 1g Kasa No iz\nBelge No : 49 Z No : 205\n\nRefNo : T172023000801615\nETTİN : 51467467-9991-ed11-a3ce-08e04cb30e6b\n\n8690639001312 x 1 AD *34,90-B\nLİPTON EARL GREY DEM %e1 *34,90\n8682615191925 x 1 AD *19,25-B\nIK DEMLİK POŞET ÇAY %@1 *19,25\n8682615191925 x 1 AD *19,25-B\nIK DEMLİK POŞET ÇAY %@1 *19,25\n8682615101925 x 1 AD *19,25-B\nTK DEMLİK POŞET ÇAY %@1 *19,25\n8680643020461 x 1 AD *@,25-B\nTKK MARKET POŞETİ %18 *@,25\nToplam KDV : *0,96\nToplam : *92,98\n\nYALNIZDoksantkiTLDoksankr\n\nBANKA KREDİ KARTI *92,90\n\nj Bu e-Arsiv Faturanizi,\ne@arsiv.kooperatifmarket.com.tr\nresinden Referans No girisi yaparak\n- görüntüleyebilirsiniz.\nFirma VKN : 845 @62 7145\nFatura No +: T17202300909001615\ni Ödenen Tutar 92,90\n\n121 LLI\n\n“ İn Nahas Tüketici\n\nİrsaliye Yerine Geçer\n\nMerkez : SARAY MAlI, GIDACILAR CD.\nNO:11 KAHRAMANKAZAN/ ANKARA\nWeb : uww,kooperalifmarkeL.com.tr\nSARAY MAH, GIDACILAR CD.NO:11\nİADE İŞLEMLERİNDE SATIŞ FİŞİNİN VE\nKREDİ KARTININ İBRAZI GEREKLİDİR.\nMersis No : 0845 0627 1450 00001\n\nYALAMANI KANI ALNAN ULU NALIN NU ULU\n\n \n\f"
+    }
+  }
+}

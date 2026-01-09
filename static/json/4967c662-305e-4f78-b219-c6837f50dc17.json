@@ -1,0 +1,14 @@
+{
+  "job_id": "4967c662-305e-4f78-b219-c6837f50dc17",
+  "input": {
+    "path": "/app/storage/inputs/4967c662-305e-4f78-b219-c6837f50dc17_ornek_fatura_readai.pdf"
+  },
+  "raw_extraction": {
+    "text": "n n\nÖRNEK T CAR FATURA\nFirma: Readai Teknoloji A.n.\nAdres: Maslak Mah. Büyükdere Cad. No:123 ninli / nstanbul\nVergi Dairesi: Maslak VKN: 1234567890\nFatura No: RDA-2026-0001\nFatura Tarihi: 05.01.2026\nÜrün / Hizmet Miktar Birim Fiyat (TL) Tutar (TL)\nYapay Zeka Dannnmanlnk Hizmeti 1 12.000,00 12.000,00\nOCR & Doküman nnleme Hizmeti 1 8.000,00 8.000,00\nAra Toplam: 20.000,00 TL\nKDV (%20): 4.000,00 TL\nGenel Toplam: 24.000,00 TL\nYalnnz Yirmi Dört Bin Türk Lirasn\nBu belge örnek/test amaçlndnr."
+  },
+  "llm": {
+    "local-llm": {
+      "normalized_text": "n n\nÖRNEK T CAR FATURA\nFirma: Readai Teknoloji A.n.\nAdres: Maslak Mah. Büyükdere Cad. No:123 Şişli / İstanbul\nVergi Dairesi: Maslak VKN: 1234567890\nFatura No: RDA-2026-0001\nFatura Tarihi: 05.01.2026\nÜrün / Hizmet Miktar Birim Fiyat (TL) Tutar (TL)\nYapay Zeka Danışmanlık Hizmeti 1 12.000,00 12.000,00\nOCR & Doküman İnceleme Hizmeti 1 8.000,00 8.000,00\nAra Toplam: 20.000,00 TL\nKDV (%20): 4.000,00 TL\nGenel Toplam: 24.000,00 TL\nYalnız Yirmi Dört Bin Türk Lirasn\nBu belge örnek/test amaçlıdır."
+    }
+  }
+}
